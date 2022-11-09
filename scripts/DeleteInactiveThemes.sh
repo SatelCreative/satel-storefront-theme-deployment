@@ -6,6 +6,8 @@ REPO_NAME=$3
 GITHUB_TOKEN=$4
 SHOPIFY_API_VERSION="2022-10"
 
+pwd
+ls
 cd scripts 
 ls
 
