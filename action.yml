@@ -41,7 +41,9 @@ runs:
   using: "composite"
   steps:
         - name: Print dir 
-          run: echo ${{ github.action_path }}
+          run: |
+              cd ${{ github.action_path }}
+              ls
           shell: bash
       # - name: Delete old themes
       #   run: |
