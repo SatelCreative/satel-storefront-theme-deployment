@@ -42,7 +42,10 @@ runs:
   steps:
         - name: Print dir 
           run: |
+              pwd
               cd ${{ github.action_path }}
+              ls
+              cd scripts
               ls
           shell: bash
       # - name: Delete old themes
