@@ -1,0 +1,69 @@
+name: Satel theme deployment
+description: Deploys themes for a shopify storefront
+
+inputs:
+  store-name:
+    description: Name of the store
+    required: true
+  theme-password:
+    description: Password for the theme
+    required: true  
+  theme-name:
+    description: Name of the theme that will get created 
+    required: true  
+  theme-env:
+    description: Name of the environment for theme deployment
+    required: true 
+  copy-settings:
+    description: Parameter to check if the setting need to copy
+    required: false   
+    default: "false" 
+  main-theme-id:
+    description: ID of main theme
+    required: false  
+  repo-name:
+    description: Name of the current repo
+    required: true
+  github-token:
+    description: Token for graphl calls
+    required: true      
+  # shopify-api-version:
+  #   description: Shopify api version
+  #   required: true 
+  current-branch-name: 
+    description: Provides current branch name 
+    required: false  
+  tag-name: 
+    description: Provides current tag name
+    required: false     
+
+runs:
+  using: "composite"
+  steps:
+      - name: "Print current dire"
+        run:  ${{ github.action_path }}/entrypoint.sh
+        shell: bash
+
+      # - name: Delete old themes
+      #   run: |
+      #       if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
+      #         docker run -v ${PWD}:/theme/src -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1  ./scripts/DeleteInactiveThemes.sh \
+      #         ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
+      #       fi  
+      #   shell: bash  
+
+    # - name: Deploy a PR or a Tag
+    #   run: |
+    #       if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
+    #         docker run -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ./scripts/DeployPRorTag.sh \
+    #         ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.theme-name }} ${{ inputs.theme-env }} ${{ inputs.copy-settings }}
+    #       fi  
+    #   shell: bash  
+
+    # - name: Deploy Main
+    #   run: |
+    #       if [[ ${{ inputs.current-branch-name }} == 'main' ]]; then
+    #         docker run -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ./scripts/DeployMain.sh \
+    #         ${{ inputs.store-name }}
+    #       fi  
+    #   shell: bash  
