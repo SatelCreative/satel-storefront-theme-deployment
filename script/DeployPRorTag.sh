@@ -29,11 +29,11 @@ deploy_pr_branch_or_tag() {
     if [[ COPY_SETTINGS == true ]]
     then   
         echo "COPY_SETTING LOOP"
-        docker run satel/themekit:1.2-alpha1 theme download --env ${THEME_ENV} config/settings_data.json --live
+        docker run satel/themekit:1.2-alpha1 theme download --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --env ${THEME_ENV} config/settings_data.json --live
     fi 
 
     #TODO : PR theme links  
-    
+    cd src
     echo "Running deploy command"
     docker run satel/themekit:1.2-alpha1 theme deploy --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID}  --env ${THEME_ENV}; STATUS1=$?     
 
