@@ -40,13 +40,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-        # - name: Print dir 
-        #   run: |
-        #       pwd
-        #       cd ${{ github.action_path }}
-        #       ls
-        #   shell: bash
-          
         - name: Delete old themes
           run: |
             if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
