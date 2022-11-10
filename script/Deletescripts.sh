@@ -10,7 +10,7 @@ pwd
 
 
 
-docker run -v ${PWD}:/theme satel/themekit:1.2-alpha1  ./DeleteInactiveThemes.sh \
+docker run -v ${PWD}:/theme satel/themekit:1.2-alpha1  /script/DeleteInactiveThemes.sh \
                 # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
 # apk add jq 
 
