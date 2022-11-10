@@ -13,20 +13,21 @@ function delete_inactive_themes() {
 
     get_branch_list
     BRANCH_NAMES=( $BRANCH_LIST )
+    echo $BRANCH_NAMES
 
-    for THEME in "${THEME_LIST[@]}"
-    do    
-        if [[ ! "${BRANCH_NAMES[*]}" =~ "${THEME}" ]]; then
-            echo "Themes that will be deleted PR:${THEME}"
-            THEME_ID=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep -i ${THEME} | cut -d "[" -f 2 | cut -d "]" -f 1` # | cut -d "e" -f 2
+    # for THEME in "${THEME_LIST[@]}"
+    # do    
+    #     if [[ ! "${BRANCH_NAMES[*]}" =~ "${THEME}" ]]; then
+    #         echo "Themes that will be deleted PR:${THEME}"
+    #         THEME_ID=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep -i ${THEME} | cut -d "[" -f 2 | cut -d "]" -f 1` # | cut -d "e" -f 2
     
-            # curl -d "{\"theme\":{\"id\": \"${THEME_ID}\", \"name\": \"${THEME}\"}}" \
-            # -X DELETE "https://${STORE_NAME}/admin/api/${SHOPIFY_API_VERSION}/themes/${THEME_ID}.json" \
-            # -H "X-Shopify-Access-Token: ${THEMEKIT_PASSWORD}" \
-            # -H "Content-Type: application/json" 
+    #         # curl -d "{\"theme\":{\"id\": \"${THEME_ID}\", \"name\": \"${THEME}\"}}" \
+    #         # -X DELETE "https://${STORE_NAME}/admin/api/${SHOPIFY_API_VERSION}/themes/${THEME_ID}.json" \
+    #         # -H "X-Shopify-Access-Token: ${THEMEKIT_PASSWORD}" \
+    #         # -H "Content-Type: application/json" 
 
-        fi
-    done
+    #     fi
+    # done
 }
 
 function get_branch_list(){
@@ -47,7 +48,7 @@ function get_branch_list(){
     BRANCH_LIST=`curl -X POST "https://api.github.com/graphql" \
         -H "Authorization: bearer ${GITHUB_TOKEN}" \
         -H "Content-Type: application/json"  \
-        -d "{ \"query\": \"${PAYLOAD}\"}" | jq ".data.organization.repository.refs.edges[].node.name"`; STATUS1=$?  
+        -d "{ \"query\": \"${PAYLOAD}\"}" #| jq ".data.organization.repository.refs.edges[].node.name"`; STATUS1=$?  
 
     # IMPORTANT: Catch exit code so all the PR: themes dont get deleted
     if [[ $STATUS1 != 0 ]]
