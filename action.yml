@@ -44,8 +44,7 @@ runs:
           run: |
             if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
               cp -r ${{ github.action_path }}/script/ ${PWD}  
-              #${{ github.action_path }}/script/Deletescripts.sh
-              docker run -v ${PWD}:/theme satel/themekit:1.2-alpha1 /script/Deletescripts.sh
+              ${{ github.action_path }}/script/Deletescripts.sh
               # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
             fi  
           shell: bash 
