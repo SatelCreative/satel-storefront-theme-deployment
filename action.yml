@@ -43,7 +43,7 @@ runs:
         - name: Delete old themes
           run: |
             if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-              cp -r ${{ github.action_path }}/script/ ${PWD}  #for some reason docker runc -v ${{ github.action_path }}:/theme doenst work 
+              cp -r ${{ github.action_path }}/script/ ${PWD}  
               #${{ github.action_path }}/script/Deletescripts.sh
               docker run -v ${PWD}:/theme satel/themekit:1.2-alpha1 ls
               # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
@@ -54,7 +54,7 @@ runs:
 #         - name: Delete old themes
 #           run: |
 #             if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-#               docker run -v ${PWD}:/theme/src -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ls #./scripts/DeleteInactiveThemes.sh \
+#               docker run -v ${PWD}:/theme/src -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ls #./scripts/DeleteInactiveThemes.sh \ #for some reason docker runc -v ${{ github.action_path }}:/theme doenst work 
 #              # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
 #             fi  
 #           shell: bash  
