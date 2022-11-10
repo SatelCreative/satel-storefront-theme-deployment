@@ -52,7 +52,7 @@ runs:
             cwd=${{ github.action_path }}
             echo $cwd
             if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-              docker run -v /actions-runner/_work/_actions/SatelCreative/satel-storefront-theme-deployment/feature/shell-deployment:/theme satel/themekit:1.2-alpha1  pwd #./scripts/DeleteInactiveThemes.sh \
+              docker run -v /actions-runner/_work/_actions/SatelCreative/satel-storefront-theme-deployment/feature/shell-deployment:/theme satel/themekit:1.2-alpha1 ls #./scripts/DeleteInactiveThemes.sh \
               # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
             fi  
           shell: bash 
