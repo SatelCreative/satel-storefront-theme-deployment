@@ -40,14 +40,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-        - name: Delete old themes
-          run: |
-            if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-              cp -r ${{ github.action_path }}/script/ ${PWD}  
-              ${{ github.action_path }}/script/Deletescripts.sh
-              # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
-            fi  
-          shell: bash 
+        # - name: Delete old themes
+        #   run: |
+        #     if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
+        #       cp -r ${{ github.action_path }}/script/ ${PWD}  
+        #       ${{ github.action_path }}/script/Deletescripts.sh
+        #       # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
+        #     fi  
+        #   shell: bash 
           
           
 #         - name: Delete old themes
@@ -58,13 +58,14 @@ runs:
 #             fi  
 #           shell: bash  
 
-      # - name: Deploy a PR or a Tag
-      #   run: |
-      #       if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-      #         docker run -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ./scripts/DeployPRorTag.sh \
-      #         ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.theme-name }} ${{ inputs.theme-env }} ${{ inputs.copy-settings }}
-      #       fi  
-      #   shell: bash  
+      - name: Deploy a PR or a Tag
+        run: |
+            if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
+              #docker run -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ./scripts/DeployPRorTag.sh \
+              ${{ github.action_path }}/script/DeployPRorTag.sh ${{ inputs.store-name }} ${{ inputs.theme-password }}
+              ${{ inputs.theme-name }} ${{ inputs.theme-env }} ${{ inputs.copy-settings }}
+            fi  
+        shell: bash  
 
       # - name: Deploy Main
       #   run: |

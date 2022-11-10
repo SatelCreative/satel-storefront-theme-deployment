@@ -7,7 +7,7 @@ THEME_ENV=$5
 SHOPIFY_API_VERSION="2022-10"
 
 function deploy_main_branch(){
-  theme configure --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID} --env ${THEME_ENV}
+  docker run -it satel/themekit:1.2-alpha1 theme configure --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID} --env ${THEME_ENV}
 
   NAME=`TZ='US/Pacific' date`
   NEW_THEME_NAME="${THEME_NAME^^}"
@@ -17,8 +17,8 @@ function deploy_main_branch(){
         -X PUT "https://${STORE_NAME}/admin/api/${SHOPIFY_API_VERSION}/themes/${THEME_ID}.json" \
         -H "X-Shopify-Access-Token: ${THEMEKIT_PASSWORD}" \
         -H "Content-Type: application/json" 
-   #Deploy to live
-   theme -e developtheme deploy --allow-live --ignored-file=config/settings_data.json    
+  #Deploy to live
+  docker run -it satel/themekit:1.2-alpha1  theme -e developtheme deploy --allow-live --ignored-file=config/settings_data.json    
 }
 
 
