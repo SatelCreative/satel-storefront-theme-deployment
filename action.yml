@@ -40,13 +40,29 @@ inputs:
 runs:
   using: "composite"
   steps:
+        - name: Print dir 
+          run: |
+              pwd
+              cd ${{ github.action_path }}
+              ls
+              cd scripts
+              ls
+          shell: bash
+          
         - name: Delete old themes
           run: |
             if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
               docker run -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1  ls #./scripts/DeleteInactiveThemes.sh \
-             # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
+              # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
             fi  
-          shell: bash  
+          shell: bash 
+#         - name: Delete old themes
+#           run: |
+#             if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
+#               docker run -v ${PWD}:/theme/src -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ls #./scripts/DeleteInactiveThemes.sh \
+#              # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
+#             fi  
+#           shell: bash  
 
       # - name: Deploy a PR or a Tag
       #   run: |
