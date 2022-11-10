@@ -50,7 +50,7 @@ runs:
         - name: Delete old themes
           run: |
             cwd=${{ github.action_path }}
-            cd cwd
+            echo $cwd
             ls
             # if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
             #   docker run -v ${PWD}:/theme/src -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1  ls #./scripts/DeleteInactiveThemes.sh \
