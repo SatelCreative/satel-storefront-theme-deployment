@@ -9,7 +9,7 @@ THEME_ID=" "
 
 
 deploy_pr_branch_or_tag() { 
-    THEME_ID=`docker run -it satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD}  --store=${STORE_NAME} | grep -i ${THEME_NAME} | cut -d "[" -f 2 | cut -d "]" -f 1`       
+    THEME_ID=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD}  --store=${STORE_NAME} | grep -i ${THEME_NAME} | cut -d "[" -f 2 | cut -d "]" -f 1`       
     echo "THEME_ID ${THEME_ID}"
     if [[ ! "${THEME_ID}" ]] 
     then
@@ -28,12 +28,12 @@ deploy_pr_branch_or_tag() {
     if [[ COPY_SETTINGS == true ]]
     then   
         echo "COPY_SETTING LOOP"
-        docker run -it satel/themekit:1.2-alpha1 theme download --env ${THEME_ENV} config/settings_data.json --live
+        docker run satel/themekit:1.2-alpha1 theme download --env ${THEME_ENV} config/settings_data.json --live
     fi 
 
     #TODO : PR theme links  
 
-    docker run -it satel/themekit:1.2-alpha1 theme deploy --env ${THEME_ENV}; STATUS1=$?     
+    docker run satel/themekit:1.2-alpha1 theme deploy --env ${THEME_ENV}; STATUS1=$?     
 
     #To overcome first theme deploy's limitation for V2 of uploading files in a bad order, so deploy once again
     if [[ $STATUS1 != 0 ]]
@@ -44,7 +44,7 @@ deploy_pr_branch_or_tag() {
 }   
 
 function configure_theme(){
-    docker run -it satel/themekit:1.2-alpha1 theme configure --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID} --env ${THEME_ENV}
+    docker run satel/themekit:1.2-alpha1 theme configure --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID} --env ${THEME_ENV}
     echo $THEME_ID
 }
 
