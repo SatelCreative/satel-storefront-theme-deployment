@@ -33,8 +33,11 @@ deploy_pr_branch_or_tag() {
     fi 
 
     #TODO : PR theme links  
-    cd src
-    ls
+
+    # cd src
+    # ls
+
+    #REPLACE docker run with CURL PUT 
     echo "Running deploy command"
     docker run satel/themekit:1.2-alpha1 theme deploy --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID}  --env ${THEME_ENV}; STATUS1=$?     
 
