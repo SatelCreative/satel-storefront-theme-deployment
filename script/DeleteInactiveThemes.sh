@@ -6,11 +6,11 @@ REPO_NAME=$3
 GITHUB_TOKEN=$4
 SHOPIFY_API_VERSION="2022-10"
 
-apk add jq 
+docker run satel/themekit:1.2-alpha1 apk add jq 
 
 function delete_inactive_themes() {
     # grab all the themes except for main and sandboxes as we dont want to delete theme
-    THEME_NAMES=`theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep 'PR: ' | awk '{print $3}'`
+    THEME_NAMES=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep 'PR: ' | awk '{print $3}'`
     THEME_LIST=( $THEME_NAMES )
 
     get_branch_list
@@ -20,7 +20,7 @@ function delete_inactive_themes() {
     do    
         if [[ ! "${BRANCH_NAMES[*]}" =~ "${THEME}" ]]; then
             echo "Themes that will be deleted PR:${THEME}"
-            THEME_ID=`theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep -i ${THEME} | cut -d "[" -f 2 | cut -d "]" -f 1` # | cut -d "e" -f 2
+            THEME_ID=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep -i ${THEME} | cut -d "[" -f 2 | cut -d "]" -f 1` # | cut -d "e" -f 2
     
             # curl -d "{\"theme\":{\"id\": \"${THEME_ID}\", \"name\": \"${THEME}\"}}" \
             # -X DELETE "https://${STORE_NAME}/admin/api/${SHOPIFY_API_VERSION}/themes/${THEME_ID}.json" \
