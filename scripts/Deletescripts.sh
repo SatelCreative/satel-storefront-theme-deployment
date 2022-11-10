@@ -8,8 +8,8 @@ SHOPIFY_API_VERSION="2022-10"
 
 pwd
 ls
-# cd scripts 
-# ls
+cd scripts 
+ls
 
 #docker run -v ${cwd}:/theme satel/themekit:1.2-alpha1  ls #/DeleteInactiveThemes.sh \
                 # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
