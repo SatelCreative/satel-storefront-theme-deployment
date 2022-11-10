@@ -8,8 +8,7 @@ SHOPIFY_API_VERSION="2022-10"
 
 pwd
 ls
-cd scripts 
-ls
+
 
 
 # apk add jq 

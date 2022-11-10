@@ -7,11 +7,10 @@ GITHUB_TOKEN=$4
 SHOPIFY_API_VERSION="2022-10"
 
 pwd
-ls
-cd scripts 
-ls
 
-#docker run -v ${cwd}:/theme satel/themekit:1.2-alpha1  ls #/DeleteInactiveThemes.sh \
+
+
+docker run -v ${PWD}:/theme satel/themekit:1.2-alpha1  ./DeleteInactiveThemes.sh \
                 # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
 # apk add jq 
 
