@@ -60,11 +60,9 @@ runs:
 
       - name: Deploy a PR or a Tag
         run: |
-            if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-              #docker run -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ./scripts/DeployPRorTag.sh \
-              ${{ github.action_path }}/script/DeployPRorTag.sh ${{ inputs.store-name }} ${{ inputs.theme-password }}
-              ${{ inputs.theme-name }} ${{ inputs.theme-env }} ${{ inputs.copy-settings }}
-            fi  
+            # if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
+              ${{ github.action_path }}/script/DeployPRorTag.sh  ${{ inputs.store-name }} ${{ inputs.theme-password }}  ${{ inputs.theme-name }} ${{ inputs.theme-env }} ${{ inputs.copy-settings }}
+            #fi  
         shell: bash  
 
       # - name: Deploy Main
