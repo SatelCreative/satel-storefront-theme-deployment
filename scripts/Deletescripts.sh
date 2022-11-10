@@ -13,10 +13,6 @@ ls
 
 #docker run -v ${cwd}:/theme satel/themekit:1.2-alpha1  ls #/DeleteInactiveThemes.sh \
                 # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
-
-    docker.image("satel/themekit:1.0-alpha1").inside(("--entrypoint=''")) {
-        theme version
-    }
 # apk add jq 
 
 # function delete_inactive_themes() {
