@@ -6,8 +6,6 @@ REPO_NAME=$3
 GITHUB_TOKEN=$4
 SHOPIFY_API_VERSION="2022-10"
 
-docker run satel/themekit:1.2-alpha1 apk add jq 
-
 function delete_inactive_themes() {
     # grab all the themes except for main and sandboxes as we dont want to delete theme
     THEME_NAMES=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep 'PR: ' | awk '{print $3}'`
