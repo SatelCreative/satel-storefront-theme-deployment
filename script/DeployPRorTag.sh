@@ -34,12 +34,16 @@ deploy_pr_branch_or_tag() {
 
     #TODO : PR theme links  
 
-    # cd src
+    cd src
     # ls
 
     #REPLACE docker run with CURL PUT 
     echo "Running deploy command"
-    docker run satel/themekit:1.2-alpha1 theme deploy --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID}  --env ${THEME_ENV}; STATUS1=$?     
+    curl -d "{\"theme\":{\"name\": \"PR: ${THEME_NAME}}\", \"id\": \"${THEME_ID}\"}}" \
+        -X PUT "https://${STORE_NAME}/admin/api/${SHOPIFY_API_VERSION}/themes/${THEME_ID}.json" \
+        -H "X-Shopify-Access-Token: ${THEMEKIT_PASSWORD}" \
+        -H "Content-Type: application/json" 
+    #docker run satel/themekit:1.2-alpha1 theme deploy --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID}  --env ${THEME_ENV}; STATUS1=$?     
 
     #To overcome first theme deploy's limitation for V2 of uploading files in a bad order, so deploy once again
     # if [[ $STATUS1 != 0 ]]

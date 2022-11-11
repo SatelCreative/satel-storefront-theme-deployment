@@ -18,7 +18,7 @@ function deploy_main_branch(){
         -H "X-Shopify-Access-Token: ${THEMEKIT_PASSWORD}" \
         -H "Content-Type: application/json" 
   #Deploy to live
-  docker run -it satel/themekit:1.2-alpha1  theme -e developtheme deploy --allow-live --ignored-file=config/settings_data.json    
+  #docker run -it satel/themekit:1.2-alpha1  theme -e developtheme deploy --allow-live --ignored-file=config/settings_data.json    
 }
 
 
