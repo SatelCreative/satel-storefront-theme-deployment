@@ -43,13 +43,13 @@ deploy_pr_branch_or_tag() {
     #     -X PUT "https://${STORE_NAME}/admin/api/${SHOPIFY_API_VERSION}/themes/${THEME_ID}.json" \
     #     -H "X-Shopify-Access-Token: ${THEMEKIT_PASSWORD}" \
     #     -H "Content-Type: application/json" 
-    docker run satel/themekit:1.2-alpha1  theme deploy --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID}  --env ${THEME_ENV}
+    docker run satel/themekit:1.2-alpha1  theme deploy --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID}  --env ${THEME_ENV}; STATUS1=$?
     #To overcome first theme deploy's limitation for V2 of uploading files in a bad order, so deploy once again
-    # if [[ $STATUS1 != 0 ]]
-    # then    
-    #     echo "THEME DEPLOY LOOP"
-    #     docker run satel/themekit:1.2-alpha1 theme deploy --env ${THEME_ENV}
-    # fi    
+    if [[ $STATUS1 != 0 ]]
+    then    
+        echo "THEME DEPLOY LOOP"
+        docker run satel/themekit:1.2-alpha1  theme deploy --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} --themeid=${THEME_ID}  --env ${THEME_ENV};
+    fi    
 }   
 
 function configure_theme(){
