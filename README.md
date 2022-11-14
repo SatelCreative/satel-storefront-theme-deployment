@@ -31,7 +31,7 @@ on:
           json: ${{ secrets.THEME_CONFIG_JSON }}
 
       - name: Deploy
-        uses: Rahul-Personal-lists/theme-runner@test/theme-deploy
+        uses: SatelCreative/satel-storefront-theme-deployment@v1
         with: 
             store-name: "<store-1> <store-2>" 
             theme-env: "developtheme"
@@ -58,4 +58,3 @@ on:
 	"<store-name-1>": "<password_for_store_1>",
 	"<store-name-2>": "<password_for_store_2>"
 }
-```
