@@ -1,14 +1,15 @@
 #!/bin/bash
 
 STORE_NAME=$1
-THEMEKIT_PASSWORD=$2 
-REPO_NAME=$3
-GITHUB_TOKEN=$4
-SHOPIFY_API_VERSION="2022-10"
+REPO_NAME=$2
+GITHUB_TOKEN=$3
+SHOPIFY_API_VERSION=$4
+
+THEMEKIT_PASSWORD=$(jq -r '."'${STORE_NAME}'"' theme.json) #decode password from json
 
 function delete_inactive_themes() {
     # grab all the themes except for main and sandboxes as we dont want to delete theme
-    THEME_NAMES=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep 'PR: ' | awk '{print $3}'`
+    THEME_NAMES=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store="${STORE_NAME}.myshopify.com" | grep 'PR: ' | awk '{print $3}'`
     THEME_LIST=( $THEME_NAMES )
 
     get_branch_list
@@ -17,21 +18,20 @@ function delete_inactive_themes() {
     for THEME in "${THEME_LIST[@]}"
     do    
         if [[ ! "${BRANCH_NAMES[*]}" =~ "${THEME}" ]]; then
-            echo "Themes that will be deleted PR:${THEME}"
-            THEME_ID=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store=${STORE_NAME} | grep -i ${THEME} | cut -d "[" -f 2 | cut -d "]" -f 1` # | cut -d "e" -f 2
+            echo "Themes that will be deleted PR:${THEME} on ${STORE_NAME}"
+            THEME_ID=`docker run satel/themekit:1.2-alpha1 theme get --list --password=${THEMEKIT_PASSWORD} --store="${STORE_NAME}.myshopify.com" | grep -i ${THEME} | cut -d "[" -f 2 | cut -d "]" -f 1` # | cut -d "e" -f 2
     
             # curl -d "{\"theme\":{\"id\": \"${THEME_ID}\", \"name\": \"${THEME}\"}}" \
             # -X DELETE "https://${STORE_NAME}/admin/api/${SHOPIFY_API_VERSION}/themes/${THEME_ID}.json" \
             # -H "X-Shopify-Access-Token: ${THEMEKIT_PASSWORD}" \
             # -H "Content-Type: application/json" 
-
         fi
     done
 }
 
 function get_branch_list(){
     PAYLOAD="query { \
-        organization(login: \\\"SatelCreative\\\") {\
+        organization(login: \\\"Rahul-Personal-lists\\\") {\
             repository(name: \\\"${REPO_NAME}\\\") {\
             refs(refPrefix: \\\"refs/heads/\\\", first: 100) {\
                 edges {\
@@ -49,7 +49,7 @@ function get_branch_list(){
         -H "Content-Type: application/json"  \
         -d "{ \"query\": \"${PAYLOAD}\"}" | jq ".data.organization.repository.refs.edges[].node.name"`; STATUS1=$?  
 
-    # IMPORTANT: Catch exit code so all the PR: themes dont get deleted
+    # Catch exit code so all the PR: themes dont get deleted
     if [[ $STATUS1 != 0 ]]
     then    
         exit 1

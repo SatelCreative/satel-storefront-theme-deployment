@@ -4,13 +4,7 @@ description: Deploys themes for a shopify storefront
 inputs:
   store-name:
     description: Name of the store
-    required: true
-  theme-password:
-    description: Password for the theme
-    required: true  
-  theme-name:
-    description: Name of the theme that will get created 
-    required: true  
+    required: true 
   theme-env:
     description: Name of the environment for theme deployment
     required: true 
@@ -27,9 +21,12 @@ inputs:
   github-token:
     description: Token for graphl calls
     required: true      
-  # shopify-api-version:
-  #   description: Shopify api version
-  #   required: true 
+  shopify-api-version:
+    description: Shopify api version
+    required: true
+  theme-files-location:
+    description: location of all the theme files 
+    required: false
   current-branch-name: 
     description: Provides current branch name 
     required: false  
@@ -40,35 +37,41 @@ inputs:
 runs:
   using: "composite"
   steps:
-        # - name: Delete old themes
-        #   run: |
-        #     if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-        #       cp -r ${{ github.action_path }}/script/ ${PWD}  
-        #       ${{ github.action_path }}/script/Deletescripts.sh
-        #       # ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
-        #     fi  
-        #   shell: bash 
-          
-          # docker run -v ${PWD}:/theme/src -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ls #./scripts/DeleteInactiveThemes.sh \ #for some reason docker runc -v ${{ github.action_path }}:/theme doenst work 
-          
-        # - name: Delete old themes
-        #   run: |
-        #     if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-        #         ${{ github.action_path }}/script/DeleteInactiveThemes.sh ${{ inputs.store-name }} ${{ inputs.theme-password }} ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.current-branch-name }}
-        #     fi  
-        #   shell: bash  
+        - name: Delete Old Themes
+          run: |
+            if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
+              stores=( ${{ inputs.store-name }} )
+              for store in "${stores[@]}"
+              do
+                echo "Running on store ${store}"  
+                ${{ github.action_path }}/scripts/DeleteInactiveThemes.sh ${store}  ${{ inputs.repo-name }} ${{ inputs.github-token }} ${{ inputs.shopify-api-version }} 
+              done 
+            fi   
+          shell: bash  
 
         - name: Deploy a PR or a Tag
           run: |
-              # if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
-                ${{ github.action_path }}/script/DeployPRorTag.sh  ${{ inputs.store-name }} ${{ inputs.theme-password }}  ${{ inputs.theme-name }} ${{ inputs.theme-env }} ${{ inputs.copy-settings }}
-              #fi  
+            if [[ ${{ inputs.current-branch-name }} != 'main' ]] || [ -n ${{ inputs.tag-name }} ]; then
+              stores=( ${{ inputs.store-name }} )
+              for store in "${stores[@]}"
+              do
+                echo "Running on store ${store}"  
+                ${{ github.action_path }}/scripts/DeployPRorTag.sh ${store}  ${{ inputs.theme-env }} ${{ inputs.copy-settings }} ${{ inputs.shopify-api-version }} ${{ inputs.theme-files-location }} ${{ inputs.current-branch-name }} ${{ inputs.tag-name }}
+              done 
+            fi   
           shell: bash  
 
-      # - name: Deploy Main
-      #   run: |
-      #       if [[ ${{ inputs.current-branch-name }} == 'main' ]]; then
-      #         docker run -v ${{ github.action_path }}:/theme satel/themekit:1.2-alpha1 ./scripts/DeployMain.sh \
-      #         ${{ inputs.store-name }}
-      #       fi  
-      #   shell: bash  
+        - name: Deploy Main
+          run: |
+              if [[ ${{ inputs.current-branch-name }} == 'main' ]]; then
+                stores=( ${{ inputs.store-name }} )
+                i=0
+                for store in "${stores[@]}"
+                do
+                  echo "Running on store ${store}" 
+                  ids=( ${{ inputs.main-theme-id }} ) 
+                  ${{ github.action_path }}/scripts/DeployMain.sh ${store} ${{ inputs.current-branch-name }} ${ids[i]} ${{ inputs.theme-env }} ${{ inputs.shopify-api-version }} ${{ inputs.theme-files-location }}
+                  i=$((i+1))
+                done 
+              fi  
+          shell: bash  
